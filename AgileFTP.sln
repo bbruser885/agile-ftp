@@ -1,7 +1,10 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgileFTP", "AgileFTP\AgileFTP.csproj", "{5F39DB82-6244-4848-9251-263C8D01459C}"
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.8
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgileFTP", "AgileFTP\AgileFTP.csproj", "{5F39DB82-6244-4848-9251-263C8D01459C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FtpConnection", "FtpConnection\FtpConnection.csproj", "{43D6672E-A4A6-44D4-8126-D6EAECCD0841}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,5 +16,15 @@ Global
 		{5F39DB82-6244-4848-9251-263C8D01459C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F39DB82-6244-4848-9251-263C8D01459C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F39DB82-6244-4848-9251-263C8D01459C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43D6672E-A4A6-44D4-8126-D6EAECCD0841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43D6672E-A4A6-44D4-8126-D6EAECCD0841}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43D6672E-A4A6-44D4-8126-D6EAECCD0841}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43D6672E-A4A6-44D4-8126-D6EAECCD0841}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0C31709-2FEB-41EA-8DB9-C0DC78C56E33}
 	EndGlobalSection
 EndGlobal
