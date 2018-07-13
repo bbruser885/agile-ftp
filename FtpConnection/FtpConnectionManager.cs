@@ -87,6 +87,10 @@ namespace FtpConnection
         {
             try
             {
+                var request = getNewRequest(remotepath + filename);
+                request.Method = WebRequestMethods.Ftp.DeleteFile;
+
+                FtpWebResponse response = (FtpWebResponse) request.GetResponse();
                 return true;
             }
             catch(Exception ex)
