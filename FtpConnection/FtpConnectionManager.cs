@@ -95,7 +95,7 @@ namespace FtpConnection
         }
 
         /*
-        I don't know what inputs will be needed for this so feel free to add the ones you need if you take the ticket 
+        I don't know what inputs will be needed for this so feel free to add the ones you need if you take the ticket
         */
         public bool ChangePermissions(string filename)
         {
