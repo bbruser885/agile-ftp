@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 
 namespace FtpConnection
 {
@@ -7,6 +8,14 @@ namespace FtpConnection
         private string username = "";
         private string password = "";
         private string hostname = "";
+
+        private FtpWebRequest getNewRequest(string path)
+        {
+            var request = (FtpWebRequest) WebRequest.Create("ftp://" + hostname + "/" + path);
+            request.Credentials = new NetworkCredential(username, password);
+
+            return request;
+        }
 
         public FtpConnectionManager(string user,string pass,string host)
         {
