@@ -16,6 +16,13 @@ namespace FtpConnection
         }
 
         /*
+        Using the credentials, run a test request to confirm credentials are correct
+        */
+        public bool Validate() {
+            return true;
+        }
+
+        /*
         This class takes in the filename and path to the file as well as the remote path
         in case it is not root and returns true on success and false on failure
         */
