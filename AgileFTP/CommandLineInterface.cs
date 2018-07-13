@@ -6,7 +6,7 @@ namespace AgileFTP {
 
         private static FtpConnectionManager connection;
         private static bool running;
-        
+
         public static void Start() {
             Login();
         }
