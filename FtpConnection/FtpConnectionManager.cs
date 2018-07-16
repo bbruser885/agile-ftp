@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.IO;
 
 namespace FtpConnection
 {
@@ -46,14 +47,42 @@ namespace FtpConnection
         This class takes in the filename and path to the file as well as the remote path
         in case it is not root and returns true on success and false on failure
         */
-        public bool Upload(string filename,string localpath,string remotepath)
+        public bool Upload(string filename,string remotepath, string localpath)
         {
             try
             {
+                /* Create the FTP request */
+                FtpWebRequest newRequest = (FtpWebRequest)FtpWebRequest.Create(remotepath + filename);
+
+                /* Set ftp properties */
+                newRequest.Method = WebRequestMethods.Ftp.UploadFile;
+                newRequest.Credentials = new NetworkCredential(username, password);
+                newRequest.UseBinary = true;
+                newRequest.KeepAlive = false;
+
+                /*Load the file we want into a buffer */
+                FileStream uploadFileStream = File.OpenRead(localpath);
+                byte[] uploadBuffer = new byte[uploadFileStream.Length];
+
+                uploadFileStream.Read(uploadBuffer, 0, uploadBuffer.Length);
+                uploadFileStream.Close();
+
+                /*Upload the file to the server*/
+                Stream serverStream = newRequest.GetRequestStream();
+                serverStream.Write(uploadBuffer, 0, uploadBuffer.Length);
+                serverStream.Close();
+
+                Console.WriteLine("File was successfully uploaded.");
                 return true;
+            }
+            catch(FileNotFoundException e)
+            {
+                Console.WriteLine("\nError: file not found.\n");
+                return false;
             }
             catch(Exception ex)
             {
+                Console.WriteLine("Error: Something nebulous went wrong\n");
                 return false;
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using FtpConnection;
 
 namespace AgileFTP {
@@ -52,7 +53,27 @@ namespace AgileFTP {
 
         private static void ParseCommand(string cmd) {
             Console.WriteLine(cmd);
+
+            switch (cmd.ToLower())
+            {
+                // FTP Options
+                case "upload file":
+                    userUploadFile();
+                    break;
+                default:
+                    Console.WriteLine("Command was not found.");
+                    break;
+            }
         }
 
+        public static void userUploadFile()
+        {
+            Console.Write("File to upload (Eg. C:/Users/Frank/something.txt): ");
+            string ftpAddress = "ftp://73.180.17.142/";
+            string filePath = Console.ReadLine();
+            string fileName = Path.GetFileName(filePath);
+
+            connection.Upload(fileName, ftpAddress, filePath);
+        }
     }
 }
