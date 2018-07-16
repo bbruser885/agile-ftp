@@ -8,14 +8,7 @@ namespace FtpConnection
         private string username = "";
         private string password = "";
         private string hostname = "";
-
-        private FtpWebRequest getNewRequest(string path)
-        {
-            var request = (FtpWebRequest) WebRequest.Create("ftp://" + hostname + "/" + path);
-            request.Credentials = new NetworkCredential(username, password);
-
-            return request;
-        }
+        private string cwd = "";
 
         public FtpConnectionManager(string user,string pass,string host)
         {
@@ -24,11 +17,29 @@ namespace FtpConnection
             hostname = host;
         }
 
+        public FtpConnectionManager() {
+            username = "agile_ftp";
+            password = "gilmore";
+            hostname = "pigs.land";
+        }
+
         /*
         Using the credentials, run a test request to confirm credentials are correct
         */
         public bool Validate() {
-            return true;
+            try {
+                FtpWebRequest req = GetNewRequest();
+                req.Method = WebRequestMethods.Ftp.ListDirectory;
+                WebResponse response = req.GetResponse();
+                return true;
+            } catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        public bool ChangeDirectory(string dir) {
+            return false;
         }
 
         /*
@@ -87,7 +98,7 @@ namespace FtpConnection
         {
             try
             {
-                var request = getNewRequest(remotepath + filename);
+                var request = GetNewRequest(remotepath + filename);
                 request.Method = WebRequestMethods.Ftp.DeleteFile;
 
                 FtpWebResponse response = (FtpWebResponse) request.GetResponse();
@@ -127,6 +138,21 @@ namespace FtpConnection
             {
                 return false;
             }
+        }
+
+        /*
+        Generates a new web request
+        */
+        private FtpWebRequest GetNewRequest(string path) {
+            if (path[0] != '/')
+                path = cwd + path;
+            var request = (FtpWebRequest)WebRequest.Create("ftp://" + hostname + "/" + path);
+            request.Credentials = new NetworkCredential(username, password);
+
+            return request;
+        }
+        private FtpWebRequest GetNewRequest() {
+            return GetNewRequest("");
         }
     }
 }

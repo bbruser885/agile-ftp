@@ -14,6 +14,10 @@ namespace AgileFTP {
         private static void Login() {
             Console.Write("Enter hostname:");
             String h = Console.ReadLine();
+            if (h == "?") {
+                SkipLogin();
+                return;
+            }
             Console.Write("Enter username:");
             String u = Console.ReadLine();
             Console.Write("Enter password:");
@@ -21,6 +25,20 @@ namespace AgileFTP {
             connection = new FtpConnectionManager(u, p, h);
             if (connection.Validate())
                 ProcessInput();
+            else {
+                Console.WriteLine("Login Failed");
+                Login();
+            }
+                
+        }
+
+        private static void SkipLogin() {
+            connection = new FtpConnectionManager();
+            if (connection.Validate())
+                ProcessInput();
+            else {
+                Console.WriteLine("Test Login Failed");
+            }
         }
 
         private static void ProcessInput() {
