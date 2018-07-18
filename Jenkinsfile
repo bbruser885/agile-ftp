@@ -12,7 +12,14 @@ pipeline {
 
 		stage('Test') {
 			steps {
-				sh 'dotnet test Tests/ --configuration Release'
+				script {
+					try {
+						sh 'dotnet test Tests/ --configuration Release'
+					}
+					catch (ex) {
+						currentBuild.result = 'UNSTABLE'
+					}
+				}
 			}
 		}
 	}
