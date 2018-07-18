@@ -9,11 +9,12 @@ namespace FtpConnection
         private string username = "";
         private string password = "";
         private string hostname = "";
+        private NetworkCredential credentials;
 
         private FtpWebRequest getNewRequest(string path)
         {
             var request = (FtpWebRequest) WebRequest.Create("ftp://" + hostname + "/" + path);
-            request.Credentials = new NetworkCredential(username, password);
+            request.Credentials = credentials;
 
             return request;
         }
@@ -23,6 +24,8 @@ namespace FtpConnection
             username = user;
             password = pass;
             hostname = host;
+
+            credentials = new NetworkCredential(username, password);
         }
 
         /*
