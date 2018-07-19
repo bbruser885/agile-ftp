@@ -147,15 +147,25 @@ namespace FtpConnection
         /*
         I don't know if this should return a bool or if it will need to return something else feel free to change if you take the ticket for it
          */
-        public bool listFiles()
+        public string listFiles(string remotePath)
         {
             try
             {
-                return true;
+                /*create a request and set the method to request list directory*/
+                FtpWebRequest request = getNewRequest(remotePath);
+                request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+
+                /*create a response and get a response from the request*/
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+
+                /*read stream and convert to string and return*/
+                 Stream filesToList = response.GetResponseStream();
+                 StreamReader reader = new StreamReader(filesToList);
+                return reader.ReadToEnd();
             }
             catch(Exception ex)
             {
-                return false;
+                return "could not list files from remote host";
             }
         }
 

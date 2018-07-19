@@ -64,10 +64,21 @@ namespace AgileFTP {
                 case "upload":
                     userUploadFile();
                     break;
+                case "ls":
+                    ListFiles();
+                    break;
                 default:
                     Console.WriteLine("Command was not found.");
                     break;
             }
+        }
+
+        private static void ListFiles()
+        {
+            Console.WriteLine(@"Directory to list (Eg. /home");
+            string path = @"./" + Console.ReadLine();
+            string files = connection.listFiles(path);
+            Console.WriteLine("{0}", files);
         }
 
         public static void userUploadFile()
