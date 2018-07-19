@@ -11,11 +11,15 @@ namespace FtpConnection
         private string hostname = "";
         private string cwd = "";
 
+        private NetworkCredential credentials;
+
         public FtpConnectionManager(string user,string pass,string host)
         {
             username = user;
             password = pass;
             hostname = host;
+
+            credentials = new NetworkCredential(username, password);
         }
 
         public FtpConnectionManager() {
@@ -40,6 +44,7 @@ namespace FtpConnection
         }
 
         public bool ChangeDirectory(string dir) {
+            //TODO
             return false;
         }
 

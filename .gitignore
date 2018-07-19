@@ -1,6 +1,12 @@
 # Visual Studio temporary files
 /.vs/
 
+# Visual Studio redundant project files (so modified solution/project files from
+# another version of Visual Studio don't get committed by accident)
+/*.csproj
+/*.sln
+!/AgileFTP.sln
+
 # Autosave files
 *~
 

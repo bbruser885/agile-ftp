@@ -9,12 +9,11 @@ pipeline {
 				sh 'dotnet build --configuration Release'
 			}
 		}
-/* uncomment when we have tests
+
 		stage('Test') {
 			steps {
-				sh 'dotnet test --configuration Release'
+				sh 'dotnet test Tests/ --configuration Release'
 			}
 		}
-*/
 	}
 }

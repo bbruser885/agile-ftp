@@ -52,12 +52,16 @@ namespace AgileFTP {
         }
 
         private static void ParseCommand(string cmd) {
-            Console.WriteLine(cmd);
 
-            switch (cmd.ToLower())
+            string[] args = cmd.ToLower().Split(' ');
+
+            switch (args[0])
             {
                 // FTP Options
-                case "upload file":
+                case "cd":
+                    connection.ChangeDirectory(args[1]);
+                    break;
+                case "upload":
                     userUploadFile();
                     break;
                 default:
