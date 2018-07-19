@@ -5,8 +5,8 @@ using FtpConnection;
 namespace AgileFTP {
     public static class CommandLineInterface {
 
-        private static FtpConnectionManager connection;
-        private static bool running;
+        public static FtpConnectionManager connection;
+        public static bool running;
 
         public static void Start() {
             Login();
@@ -45,7 +45,7 @@ namespace AgileFTP {
         private static void ProcessInput() {
             running = true;
             while (running) {
-                Console.Write(">");
+                Console.Write(connection.GetCWD() + ":");
                 String cmd = Console.ReadLine();
                 ParseCommand(cmd);
             }
@@ -55,40 +55,16 @@ namespace AgileFTP {
 
             string[] args = cmd.ToLower().Split(' ');
 
-            switch (args[0])
-            {
-                // FTP Options
-                case "cd":
-                    connection.ChangeDirectory(args[1]);
-                    break;
-                case "upload":
-                    userUploadFile();
-                    break;
-                case "ls":
-                    ListFiles();
-                    break;
-                default:
-                    Console.WriteLine("Command was not found.");
-                    break;
+            if (args.Length < 1) {
+                return;
             }
-        }
 
-        private static void ListFiles()
-        {
-            Console.WriteLine(@"Directory to list (Eg. /home");
-            string path = @"./" + Console.ReadLine();
-            string files = connection.listFiles(path);
-            Console.WriteLine("{0}", files);
-        }
-
-        public static void userUploadFile()
-        {
-            Console.Write("File to upload (Eg. C:/Users/Frank/something.txt): ");
-            string ftpAddress = "ftp://73.180.17.142/";
-            string filePath = Console.ReadLine();
-            string fileName = Path.GetFileName(filePath);
-
-            connection.Upload(fileName, ftpAddress, filePath);
+            Command c = Command.GetCommand(args[0]);
+            if (c == null) {
+                Console.WriteLine("Command not found.");
+            } else if (c.Validate(args)) {
+                c.Execute(args);
+            }
         }
     }
 }

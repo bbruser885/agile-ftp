@@ -9,7 +9,7 @@ namespace FtpConnection
         private string username = "";
         private string password = "";
         private string hostname = "";
-        private string cwd = "";
+        private string cwd = "./";
 
         private NetworkCredential credentials;
 
@@ -44,8 +44,10 @@ namespace FtpConnection
         }
 
         public bool ChangeDirectory(string dir) {
-            //TODO
-            return false;
+            cwd = PreprocessPath(dir);
+            if (!cwd.EndsWith("/", StringComparison.Ordinal))
+                cwd += "/";
+            return true;
         }
 
         /*
@@ -57,7 +59,7 @@ namespace FtpConnection
             try
             {
                 /* Create the FTP request */
-                FtpWebRequest newRequest = (FtpWebRequest)FtpWebRequest.Create(remotepath + filename);
+                FtpWebRequest newRequest = GetNewRequest(remotepath + filename);
 
                 /* Set ftp properties */
                 newRequest.Method = WebRequestMethods.Ftp.UploadFile;
@@ -132,7 +134,7 @@ namespace FtpConnection
         {
             try
             {
-                var request = GetNewRequest(remotepath + filename);
+                var request = GetNewRequest(PreprocessPath(remotepath) + filename);
                 request.Method = WebRequestMethods.Ftp.DeleteFile;
 
                 FtpWebResponse response = (FtpWebResponse) request.GetResponse();
@@ -152,7 +154,7 @@ namespace FtpConnection
             try
             {
                 /*create a request and set the method to request list directory*/
-                FtpWebRequest request = getNewRequest(remotePath);
+                FtpWebRequest request = GetNewRequest(remotePath);
                 request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
 
                 /*create a response and get a response from the request*/
@@ -188,15 +190,61 @@ namespace FtpConnection
         Generates a new web request
         */
         private FtpWebRequest GetNewRequest(string path) {
-            if (path[0] != '/')
-                path = cwd + path;
-            var request = (FtpWebRequest)WebRequest.Create("ftp://" + hostname + "/" + path);
+            var request = (FtpWebRequest)WebRequest.Create("ftp://" + hostname + "./"+ PreprocessPath(path));
             request.Credentials = new NetworkCredential(username, password);
 
             return request;
         }
         private FtpWebRequest GetNewRequest() {
             return GetNewRequest("");
+        }
+
+        private string PreprocessPath(string path) {
+
+            // . = cwd
+            // .. = cwd -1
+            // / = root
+            // default = cwd
+
+            string final = "";
+
+            // assume cwd
+            if (path.Length == 0 || path == ".") {
+                final = cwd;
+                Console.Write("ew");
+            }
+            // go home
+            else if (path == "~")
+                final = "./";
+            // go back
+            else if (path == "..")
+                final = CwdMinusOne();
+            // explicit cwd
+            else if (path.StartsWith("./", StringComparison.Ordinal))
+                final = cwd + path.Substring(2);
+            // explicit root
+            else if (path.StartsWith("/", StringComparison.Ordinal))
+                final = path;
+            else
+                final = cwd + path;
+            
+            
+            return final;
+        }
+
+        private string CwdMinusOne() {
+            string[] split = cwd.Split('/');
+            if (split.Length == 0)
+                return cwd;
+            string final = "";
+            for (int i = 0; i < split.Length-2; i++) {
+                final += split[i] + "/";
+            }
+            return final;
+        }
+
+        public string GetCWD() {
+            return cwd;
         }
     }
 }
