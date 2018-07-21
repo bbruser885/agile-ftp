@@ -166,7 +166,7 @@ namespace FtpConnection
             }
             catch(System.Net.WebException)
             {
-                Console.WriteLine();
+                Console.WriteLine("File Unavailable (e.g. File Not Found, No Access)");
                 return false;
             }
         }
