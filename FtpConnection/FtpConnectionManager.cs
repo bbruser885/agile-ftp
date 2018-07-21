@@ -65,7 +65,7 @@ namespace FtpConnection
                 newRequest.Method = WebRequestMethods.Ftp.UploadFile;
                 newRequest.Credentials = new NetworkCredential(username, password);
                 newRequest.UseBinary = true;
-                newRequest.KeepAlive = false;
+                newRequest.KeepAlive = true;
 
                 /*Load the file we want into a buffer */
                 FileStream uploadFileStream = File.OpenRead(localpath);
@@ -102,10 +102,43 @@ namespace FtpConnection
         {
             try
             {
+                /* set ftpFullPath (e.g. ftp://pigs.land/test/yes.jpg) */
+                string ftpFullPath = "ftp://" + hostname + remotepath;
+
+                /* WebClient API request*/
+                using (WebClient newRequest = new WebClient())
+                {
+                    /*Send the credentials to the server*/
+                    newRequest.Credentials = new NetworkCredential(username, password);
+                    /*Load ftp file from ftpFullPath into byte array*/
+                    byte[] fileData = newRequest.DownloadData(ftpFullPath);
+
+                    /*Open FileStream to the local path + file name (e.g. C:\Users\You\yes.jpg) and write*/
+                    using (FileStream file = File.Create(localpath + filename))
+                    {
+                        file.Write(fileData, 0, fileData.Length);
+                        file.Close();
+                    }
+                    Console.WriteLine("Successfully Download " + filename + " to " + localpath);
+                }
                 return true;
             }
-            catch(Exception ex)
+            /*When you mess up the remote file path */
+            catch(NotSupportedException)
             {
+                Console.WriteLine("Remote Path Not Found");
+                return false;
+            }
+            /*When you mess up the local file path */
+            catch(DirectoryNotFoundException)
+            {
+                Console.WriteLine("Local Directory Not Found");
+                return false;
+            }
+            /*When you try to download a file you don't have access to, the file doesn't exist, or the directory doesn't exist)*/
+            catch(System.Net.WebException)
+            {
+                Console.WriteLine("File Unavailable (e.g. File Not Found, No Access)");
                 return false;
             }
         }
@@ -118,10 +151,22 @@ namespace FtpConnection
         {
             try
             {
+                /* set ftpFullPath (e.g. ftp://pigs.land/test/yes.jpg) */
+                string ftpFullPath = "ftp://" + hostname + remotepath;
+
+                FtpWebRequest newRequest = (FtpWebRequest)WebRequest.Create(ftpFullPath);
+                newRequest.Method = WebRequestMethods.Ftp.Rename;
+
+                /*Send the credentials to the server*/
+                newRequest.Credentials = new NetworkCredential(username, password);
+                newRequest.RenameTo = newFilename;
+                newRequest.GetResponse();
+                Console.WriteLine("Successfully Renamed " + oldFilename + " to " + newFilename);
                 return true;
             }
-            catch(Exception ex)
+            catch(System.Net.WebException)
             {
+                Console.WriteLine();
                 return false;
             }
         }

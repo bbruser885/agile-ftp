@@ -11,6 +11,8 @@ namespace AgileFTP {
         public static CmdList ls = new CmdList();
         public static CmdChangeDirectory cd = new CmdChangeDirectory();
         public static CmdUpload upload = new CmdUpload();
+        public static CmdDownload download = new CmdDownload();
+        public static CmdRename rename = new CmdRename();
 
         public static Command GetCommand(string s) {
             switch (s) {
@@ -22,7 +24,11 @@ namespace AgileFTP {
                     return cd;
                 case "upload":
                     return upload;
-                default:
+                case "download":
+                    return download;
+                case "rename":
+                    return rename;
+                default: 
                     return null;
             }
         }
@@ -78,6 +84,33 @@ namespace AgileFTP {
         public override bool Validate(string[] args) {
             if (args.Length < 2) {
                 Console.Write("Invalid use: upload [localPath] [remotePath (default cwd)]");
+                return false;
+            }
+            return true;
+        }
+    }
+
+    public class CmdDownload : Command {
+        public override void Execute(string[] args) {
+            CommandLineInterface.connection.Download(Path.GetFileName(args[2]), args.Length >= 3 ? args[2] : "", args[1]);
+        }
+
+        public override bool Validate(string[] args) {
+            if (args.Length < 2) {
+                Console.WriteLine("Invalid use: download [localPath] [remotePath (default cwd)]");
+                return false; 
+            }
+            return true;
+        }
+    }
+    public class CmdRename : Command {
+        public override void Execute(string[] args) {
+            CommandLineInterface.connection.Rename(args.Length >= 3 ? args[2] : "", Path.GetFileName(args[1]), args[1]);
+        }
+
+        public override bool Validate(string[] args) {
+            if (args.Length < 2) {
+                Console.WriteLine("Invalid use: rename [remotePath (default cwd)] [New Filename]");
                 return false;
             }
             return true;
