@@ -76,14 +76,14 @@ namespace AgileFTP {
             }
         }
 
-		private static void OnTimeoutEvent(Object source, ElapsedEventArgs e) {
+        private static void OnTimeoutEvent(Object source, ElapsedEventArgs e) {
             Console.WriteLine("timeout");
             Environment.Exit(1);
-		}
+        }
 
-		private static void ResetTimer() {
-			timeoutTimer.Stop();
+        private static void ResetTimer() {
+            timeoutTimer.Stop();
             timeoutTimer.Start();
-		}
+        }
     }
 }
