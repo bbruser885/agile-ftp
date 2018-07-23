@@ -13,6 +13,7 @@ namespace AgileFTP {
         public static CmdUpload upload = new CmdUpload();
         public static CmdDownload download = new CmdDownload();
         public static CmdRename rename = new CmdRename();
+        public static CmdHelp help = new CmdHelp();
 
         public static Command GetCommand(string s) {
             switch (s) {
@@ -28,6 +29,8 @@ namespace AgileFTP {
                     return download;
                 case "rename":
                     return rename;
+                case "help":
+                    return help;
                 default: 
                     return null;
             }
@@ -103,6 +106,7 @@ namespace AgileFTP {
             return true;
         }
     }
+
     public class CmdRename : Command {
         public override void Execute(string[] args) {
             CommandLineInterface.connection.Rename(args.Length >= 3 ? args[2] : "", Path.GetFileName(args[1]), args[1]);
@@ -111,6 +115,28 @@ namespace AgileFTP {
         public override bool Validate(string[] args) {
             if (args.Length < 2) {
                 Console.WriteLine("Invalid use: rename [remotePath (default cwd)] [New Filename]");
+                return false;
+            }
+            return true;
+        }
+    }
+
+    public class CmdHelp : Command
+    {
+        public override void Execute(string[] args)
+        {
+			Console.WriteLine("help            command help");
+			Console.WriteLine("exit            exit app");
+			Console.WriteLine("ls              list directory");
+			Console.WriteLine("cd              cd [path]");
+			Console.WriteLine("upload          upload [localPath] [remotePath (default cwd)]");
+			Console.WriteLine("download        download [localPath] [remotePath (default cwd)]");
+			Console.WriteLine("rename          rename [remotePath (default cwd)] [New Filename]");
+        }
+
+        public override bool Validate(string[] args)
+        {
+            if (args.Length > 1) {
                 return false;
             }
             return true;

@@ -1,14 +1,21 @@
 ﻿using System;
 using System.IO;
 using FtpConnection;
+using System.Timers;
 
 namespace AgileFTP {
     public static class CommandLineInterface {
 
         public static FtpConnectionManager connection;
         public static bool running;
+        public static Timer timeoutTimer;
 
         public static void Start() {
+            timeoutTimer = new Timer();
+            timeoutTimer.Interval = 60000; //TODO decide on the timeout interval temporarily set to one minute
+
+            timeoutTimer.Elapsed += OnTimeoutEvent;
+            timeoutTimer.Enabled = true;
             Login();
         }
 
@@ -59,6 +66,8 @@ namespace AgileFTP {
                 return;
             }
 
+            ResetTimer();
+
             Command c = Command.GetCommand(args[0]);
             if (c == null) {
                 Console.WriteLine("Command not found.");
@@ -66,5 +75,15 @@ namespace AgileFTP {
                 c.Execute(args);
             }
         }
+
+		private static void OnTimeoutEvent(Object source, ElapsedEventArgs e) {
+            Console.WriteLine("timeout");
+            Environment.Exit(1);
+		}
+
+		private static void ResetTimer() {
+			timeoutTimer.Stop();
+            timeoutTimer.Start();
+		}
     }
 }
