@@ -13,19 +13,15 @@ namespace FtpConnection
 
         private NetworkCredential credentials;
 
-        public FtpConnectionManager(string user,string pass,string host)
+        public FtpConnectionManager(string user = "agile_ftp",
+                                    string pass = "gilmore",
+                                    string host = "pigs.land")
         {
             username = user;
             password = pass;
             hostname = host;
 
             credentials = new NetworkCredential(username, password);
-        }
-
-        public FtpConnectionManager() {
-            username = "agile_ftp";
-            password = "gilmore";
-            hostname = "pigs.land";
         }
 
         /*
