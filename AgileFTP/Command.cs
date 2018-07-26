@@ -171,6 +171,7 @@ namespace AgileFTP {
 			Console.WriteLine("upload          upload [localPath] [remotePath (default cwd)]");
 			Console.WriteLine("download        download [localPath] [remotePath (default cwd)]");
 			Console.WriteLine("rename          rename [remotePath (default cwd)] [New Filename]");
+            Console.WriteLine("lls             list local directory")
         }
 
         public override bool Validate(string[] args)
