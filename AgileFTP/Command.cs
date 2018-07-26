@@ -15,6 +15,7 @@ namespace AgileFTP {
         public static CmdRename rename = new CmdRename();
         public static CmdHelp help = new CmdHelp();
         public static CmdLocalList lls = new CmdLocalList();
+        public static CmdMoveLocalFile lmv = new CmdMoveLocalFile();
 
         public static Command GetCommand(string s) {
             switch (s) {
@@ -34,6 +35,8 @@ namespace AgileFTP {
                     return help;
                 case "lls":
                     return lls;
+                case "lmv":
+                    return lmv;
                 default: 
                     return null;
             }
@@ -104,6 +107,31 @@ namespace AgileFTP {
             return false;
         }
     }
+
+    public class CmdMoveLocalFile : Command{
+        public override void Execute(string[] args)
+        {
+            File.Move(args[1], args[2]);
+            Console.WriteLine("{0} has been moved to {1}", args[1], args[2]);
+        }
+
+        public override bool Validate(string[] args)
+        {
+            //if there is a cmd source and destination
+            if (args.Length >= 3){
+                //check if the file exists
+                bool exists = File.Exists(args[1]);
+                if (exists){
+                    return true;
+                }
+                Console.WriteLine("{0} does not exist, make sure you have the right path and name");
+                return false;
+            }
+            Console.WriteLine("please make sure you specify the file you want to move/rename followed by the new location/name");
+            return false;
+        }
+
+    }
     public class CmdChangeDirectory : Command {
         public override void Execute(string[] args) {
             CommandLineInterface.connection.ChangeDirectory(args[1]);
@@ -172,6 +200,7 @@ namespace AgileFTP {
 			Console.WriteLine("download        download [localPath] [remotePath (default cwd)]");
 			Console.WriteLine("rename          rename [remotePath (default cwd)] [New Filename]");
             Console.WriteLine("lls             list local directory");
+            Console.WriteLine("lmv             move/rename local file [source] [destination]");
         }
 
         public override bool Validate(string[] args)
