@@ -14,6 +14,7 @@ namespace AgileFTP {
         public static CmdDownload download = new CmdDownload();
         public static CmdRename rename = new CmdRename();
         public static CmdHelp help = new CmdHelp();
+        public static CmdLocalList lls = new CmdLocalList();
 
         public static Command GetCommand(string s) {
             switch (s) {
@@ -31,6 +32,8 @@ namespace AgileFTP {
                     return rename;
                 case "help":
                     return help;
+                case "lls":
+                    return lls;
                 default: 
                     return null;
             }
@@ -65,6 +68,42 @@ namespace AgileFTP {
         }
     }
 
+    public class CmdLocalList : Command{
+        public override void Execute(string[] args)
+        {
+            string path = args.Length >= 2 ? args[1] : Directory.GetCurrentDirectory();
+            //get files and sub dirs
+            string [] files = Directory.GetFiles(path);
+            string[] subdirs = Directory.GetDirectories(path);
+            foreach (string dir in subdirs){
+                //remove path and write
+                Console.WriteLine("{0}", dir.Replace(path,""));
+            }
+            foreach (string file in files){
+                //remove path and write
+                Console.WriteLine("{0}", file.Replace(path,""));
+            }
+            //write them out
+        }
+
+        public override bool Validate(string[] args)
+        {
+            if (args.Length >= 1){
+                try{
+                    string path = args.Length >= 2 ? args[1] : Directory.GetCurrentDirectory();
+                    //get files and sub dirs
+                    string [] files = Directory.GetFiles(path);
+                    string[] subdirs = Directory.GetDirectories(path);
+                    return true;
+                }catch (Exception ex){
+                    string path = args.Length >= 2 ? args[1] : "";
+                    Console.WriteLine("{0} not found, make sure this is a valid path", path);
+                    return false;
+                }
+            }
+            return false;
+        }
+    }
     public class CmdChangeDirectory : Command {
         public override void Execute(string[] args) {
             CommandLineInterface.connection.ChangeDirectory(args[1]);
