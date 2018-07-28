@@ -8,4 +8,15 @@
   <ItemGroup>
     <ProjectReference Include="..\FtpConnection\FtpConnection.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Model.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\..\usr\local\share\dotnet\sdk\NuGetFallbackFolder\newtonsoft.json\9.0.1\lib\netstandard1.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

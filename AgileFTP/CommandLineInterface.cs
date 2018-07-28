@@ -3,6 +3,8 @@ using System.IO;
 using FtpConnection;
 using System.Timers;
 using System.Globalization;
+using AgileFTP.Model;
+using Newtonsoft.Json;
 
 namespace AgileFTP {
     public static class CommandLineInterface {
@@ -11,6 +13,8 @@ namespace AgileFTP {
         public static bool running;
         public static Timer timeoutTimer;
         public static string userName;
+        public static string Host;
+        public static string Password;
         public static string logFile;
 
         public static void Start() {
@@ -35,9 +39,30 @@ namespace AgileFTP {
             logFile = userName + ".log";
             Console.Write("Enter password:");
             String p = Console.ReadLine();
+            Password = p;
             connection = new FtpConnectionManager(u, p, h);
             if (connection.Validate())
+            {
+                Console.Write($"Save Login? y/n: ");
+                String choice = Console.ReadLine();
+                if (choice == "y")
+                {
+                    Console.Write("Save connection as: ");
+                    String connectionName = Console.ReadLine();
+                    connectionName.Replace(' ', '_');
+                    Connection conn = new Connection();
+                    conn.User = userName;
+                    conn.Host = Host;
+                    conn.Password = Password;
+
+                    using (StreamWriter file = File.CreateText($"{connectionName}.txt"))
+                    {
+                        JsonSerializer serializer = new JsonSerializer();
+                        serializer.Serialize(file, conn);
+                    }
+                }
                 ProcessInput();
+            }
             else {
                 Console.WriteLine("Login Failed");
                 Login();
@@ -48,7 +73,10 @@ namespace AgileFTP {
         private static void SkipLogin() {
             connection = new FtpConnectionManager();
             if (connection.Validate())
+            {
+                logFile = "default" + ".log";
                 ProcessInput();
+            }
             else {
                 Console.WriteLine("Test Login Failed");
             }
