@@ -2,6 +2,7 @@
 using System.IO;
 using FtpConnection;
 using System.Timers;
+using System.Globalization;
 
 namespace AgileFTP {
     public static class CommandLineInterface {
@@ -9,6 +10,8 @@ namespace AgileFTP {
         public static FtpConnectionManager connection;
         public static bool running;
         public static Timer timeoutTimer;
+        public static string userName;
+        public static string logFile;
 
         public static void Start() {
             timeoutTimer = new Timer();
@@ -28,6 +31,8 @@ namespace AgileFTP {
             }
             Console.Write("Enter username:");
             String u = Console.ReadLine();
+            userName = u;
+            logFile = userName + ".log";
             Console.Write("Enter password:");
             String p = Console.ReadLine();
             connection = new FtpConnectionManager(u, p, h);
@@ -69,6 +74,7 @@ namespace AgileFTP {
             ResetTimer();
 
             Command c = Command.GetCommand(args[0]);
+            File.AppendAllText(logFile, FormatLogText(cmd));
             if (c == null) {
                 Console.WriteLine("Command not found.");
             } else if (c.Validate(args)) {
@@ -84,6 +90,14 @@ namespace AgileFTP {
         private static void ResetTimer() {
             timeoutTimer.Stop();
             timeoutTimer.Start();
+        }
+
+        private static string FormatLogText(String text)
+        {
+            DateTime localTime = DateTime.Now;
+            string localTimeString = localTime.ToString(new CultureInfo("en-US"));
+
+            return $"[{localTimeString}]   {text}{Environment.NewLine}";
         }
     }
 }
