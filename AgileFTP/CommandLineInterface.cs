@@ -5,6 +5,7 @@ using System.Timers;
 using System.Globalization;
 using AgileFTP.Model;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace AgileFTP {
     public static class CommandLineInterface {
@@ -16,6 +17,7 @@ namespace AgileFTP {
         public static string Host;
         public static string Password;
         public static string logFile;
+        public static string connectionsFile = "connections.txt";
 
         public static void Start() {
             timeoutTimer = new Timer();
@@ -23,12 +25,67 @@ namespace AgileFTP {
 
             timeoutTimer.Elapsed += OnTimeoutEvent;
             timeoutTimer.Enabled = true;
-            Login();
+
+            bool decision = AskYesNoQuestion("load saved connection? y/n ");
+
+            if (!decision)
+            {
+                Login();
+                return;
+            }
+
+            if (File.Exists(connectionsFile))
+            {
+                Connections fileList;
+                try
+                {
+                    fileList = JsonConvert.DeserializeObject<Connections>(File.ReadAllText(connectionsFile));
+                }
+                catch (Exception ex)
+                {
+                    throw new FileLoadException("failed ot load connections", ex);
+                }
+                LoginWithSavedConnection(fileList);
+            }
+            else
+            {
+                Console.WriteLine("no saved connections, login required");
+                Login();
+            }
+        }
+
+        private static void LoginWithSavedConnection(Connections fileList)
+        {
+            List<string> connectionNames = new List<string>();
+            Console.WriteLine("choose connection:");
+            foreach (var c in fileList.ConnectionList)
+            {
+                connectionNames.Add(c.Name);
+                Console.WriteLine(c.Name);
+            }
+            var connNameChoice = Console.ReadLine();
+            foreach (var c in fileList.ConnectionList)
+            {
+                if (connNameChoice == c.Name)
+                {
+                    connection = new FtpConnectionManager(c.User, c.Password, c.Host);
+                    if (connection.Validate())
+                    {
+                        logFile = $"{c.User}.log";
+                        ProcessInput();
+                        Environment.Exit(1);
+
+                    }
+                }
+            }
+            Console.WriteLine("Invalid Name");
+            LoginWithSavedConnection(fileList);
         }
 
         private static void Login() {
             Console.Write("Enter hostname:");
             String h = Console.ReadLine();
+            Host = h;
             if (h == "?") {
                 SkipLogin();
                 return;
@@ -43,23 +100,10 @@ namespace AgileFTP {
             connection = new FtpConnectionManager(u, p, h);
             if (connection.Validate())
             {
-                Console.Write($"Save Login? y/n: ");
-                String choice = Console.ReadLine();
-                if (choice == "y")
+                var choice = AskYesNoQuestion("Save Login? y/n: ");
+                if (choice)
                 {
-                    Console.Write("Save connection as: ");
-                    String connectionName = Console.ReadLine();
-                    connectionName.Replace(' ', '_');
-                    Connection conn = new Connection();
-                    conn.User = userName;
-                    conn.Host = Host;
-                    conn.Password = Password;
-
-                    using (StreamWriter file = File.CreateText($"{connectionName}.txt"))
-                    {
-                        JsonSerializer serializer = new JsonSerializer();
-                        serializer.Serialize(file, conn);
-                    }
+                    SaveLogin();
                 }
                 ProcessInput();
             }
@@ -70,11 +114,65 @@ namespace AgileFTP {
                 
         }
 
+        private static void SaveLogin()
+        {
+            Console.Write("Save connection as: ");
+            String connectionName = Console.ReadLine();
+            Connection conn = new Connection();
+            conn.User = userName;
+            conn.Host = Host;
+            conn.Password = Password;
+            conn.Name = connectionName;
+
+            if (!File.Exists(connectionsFile))
+            {
+                Connections connections = new Connections();
+                connections.ConnectionList = new List<Connection>();
+                connections.ConnectionList.Add(conn);
+                using (StreamWriter file = File.CreateText(connectionsFile))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    serializer.Serialize(file, connections);
+                }
+            }
+            else
+            {
+                Connections fileList;
+                try
+                {
+                    fileList = JsonConvert.DeserializeObject<Connections>(File.ReadAllText(connectionsFile));
+                }
+                catch (Exception ex)
+                {
+                    throw new FileLoadException("failed to load connection", ex);
+                }
+                List<string> connectionNames = new List<string>();
+                foreach (var c in fileList.ConnectionList)
+                {
+                    connectionNames.Add(c.Name);
+                }
+                if (connectionNames.Contains(conn.Name))
+                {
+                    Console.WriteLine("Connection Name In Use");
+                    SaveLogin();
+                }
+                else
+                {
+                    fileList.ConnectionList?.Add(conn);
+                    using (StreamWriter file = File.CreateText(connectionsFile))
+                    {
+                        JsonSerializer serializer = new JsonSerializer();
+                        serializer.Serialize(file, fileList);
+                    }
+                }
+            }
+        }
+
         private static void SkipLogin() {
             connection = new FtpConnectionManager();
             if (connection.Validate())
             {
-                logFile = "default" + ".log";
+                logFile = "defaut.log";
                 ProcessInput();
             }
             else {
@@ -126,6 +224,17 @@ namespace AgileFTP {
             string localTimeString = localTime.ToString(new CultureInfo("en-US"));
 
             return $"[{localTimeString}]   {text}{Environment.NewLine}";
+        }
+
+        private static bool AskYesNoQuestion(string question)
+        {
+            Console.Write(question);
+            var choice = Console.ReadLine();
+            if (choice == "y" || choice == "n")
+            {
+                return choice == "y";
+            }
+            return AskYesNoQuestion(question);
         }
     }
 }
