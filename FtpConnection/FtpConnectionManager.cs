@@ -252,7 +252,6 @@ namespace FtpConnection
             // assume cwd
             if (path.Length == 0 || path == ".") {
                 final = cwd;
-                Console.Write("ew");
             }
             // go home
             else if (path == "~")
