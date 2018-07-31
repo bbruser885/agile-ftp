@@ -1,9 +1,22 @@
 ﻿using System;
 using System.Net;
 using System.IO;
+using System.Collections.Generic;
 
 namespace FtpConnection
 {
+     public struct FileDetails {
+        public String Mode;
+        public String Unknown;
+        public String User;
+        public String Group;
+        public String Size;
+        public String Month;
+        public String Day;
+        public String Time;
+        public String Name;
+    }
+
     public class FtpConnectionManager
     {
         private string username = "";
@@ -225,6 +238,46 @@ namespace FtpConnection
             {
                 return false;
             }
+        }
+
+        /*
+        Organizes a directory listing to a convenient form
+        */
+
+        private List<FileDetails> GetDirectoryDetails(string rawListing) {
+            String[] listings = rawListing.Split('\n');
+
+            List<FileDetails> directoryDetails = new List<FileDetails>();
+            for (int i = 0; i < listings.Length; ++i)
+            {
+                try
+                {
+                    String[] fieldsStrings = listings[i].Split(' ');
+                    List<String> fields = new List<String>(fieldsStrings);
+                    fields.RemoveAll(f => f == "");
+                    if (fields.Count != 9)
+                        throw new MissingFieldException("There should be exactly 9 nonempty fields!");
+
+                    Console.WriteLine("Number of fields: {0}", fields.Count);
+                    FileDetails fileDetails = new FileDetails { };
+                    fileDetails.Mode = fields[0];
+                    fileDetails.Unknown = fields[1];
+                    fileDetails.User = fields[2];
+                    fileDetails.Group = fields[3];
+                    fileDetails.Size = fields[4];
+                    fileDetails.Month = fields[5];
+                    fileDetails.Day = fields[6];
+                    fileDetails.Time = fields[7];
+                    fileDetails.Name = fields[8];
+
+                    directoryDetails.Add(fileDetails);
+                }
+                catch(MissingFieldException) {
+                    // Not adding this faulty file
+                }
+            }
+
+            return directoryDetails;
         }
 
         /*
