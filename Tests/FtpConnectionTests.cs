@@ -6,11 +6,11 @@ namespace FtpConnection.Tests
     public class FtpConnectionTests
     {
         [Fact]
-        public void Validate_TrueIfEmpty()
+        public void Validate_FalseIfEmpty()
         {
 	    FtpConnectionManager _FtpConnection = new FtpConnectionManager("", "", "");
 	    var result = _FtpConnection.Validate();
-	    Assert.True(result, "should be true for no input");
+	    Assert.False(result, "should be false for invalid input");
         }
     }
 }
