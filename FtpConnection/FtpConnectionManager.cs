@@ -5,7 +5,10 @@ using System.Collections.Generic;
 
 namespace FtpConnection
 {
-     public struct FileDetails {
+    /*
+    This class keeps track of a file's details
+    */
+    class FileDetails {
         public String Mode;
         public String Unknown;
         public String User;
@@ -15,6 +18,18 @@ namespace FtpConnection
         public String Day;
         public String Time;
         public String Name;
+        /*
+        Returns true if the file is a directory and false otherwise
+        */
+        public bool IsDirectory() {
+            try {
+                return Mode[0] == 'd';
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new MissingMemberException("The Mode field cannot be empty!");
+            }
+        }
     }
 
     public class FtpConnectionManager
