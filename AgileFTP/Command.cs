@@ -16,6 +16,7 @@ namespace AgileFTP {
         public static CmdHelp help = new CmdHelp();
         public static CmdLocalList lls = new CmdLocalList();
         public static CmdMoveLocalFile lmv = new CmdMoveLocalFile();
+	public static CmdDelete rm = new CmdDelete();
 
         public static Command GetCommand(string s) {
             switch (s) {
@@ -37,7 +38,9 @@ namespace AgileFTP {
                     return lls;
                 case "lmv":
                     return lmv;
-                default: 
+		case "rm":
+		    return rm;
+                default:
                     return null;
             }
         }
@@ -168,7 +171,7 @@ namespace AgileFTP {
         public override bool Validate(string[] args) {
             if (args.Length < 2) {
                 Console.WriteLine("Invalid use: download [localPath] [remotePath (default cwd)]");
-                return false; 
+                return false;
             }
             return true;
         }
@@ -188,6 +191,20 @@ namespace AgileFTP {
         }
     }
 
+    public class CmdDelete : Command {
+	public override void Execute(string[] args) {
+	    CommandLineInterface.connection.Delete(args.Length >= 3 ? args[2] : args[1], args.Length >= 3 ? args[1] : "");
+	}
+
+	public override bool Validate(string[] args) {
+	    if (args.Length < 2) {
+		Console.WriteLine("Invalid use: rm [remotePath (default cwd)] [filename]");
+		return false;
+	    }
+	    return true;
+	}
+    }
+
     public class CmdHelp : Command
     {
         public override void Execute(string[] args)
@@ -201,6 +218,7 @@ namespace AgileFTP {
 			Console.WriteLine("rename          rename [remotePath (default cwd)] [New Filename]");
             Console.WriteLine("lls             list local directory");
             Console.WriteLine("lmv             move/rename local file [source] [destination]");
+	    Console.WriteLine("rm              delete a remote path [remotePath (default cwd)] [filename]");
         }
 
         public override bool Validate(string[] args)
