@@ -207,10 +207,12 @@ namespace FtpConnection
                 request.Method = WebRequestMethods.Ftp.DeleteFile;
 
                 FtpWebResponse response = (FtpWebResponse) request.GetResponse();
+		Console.WriteLine("Successfully removed " + filename);
                 return true;
             }
             catch(Exception ex)
             {
+                Console.WriteLine("File Unavailable (e.g. File Not Found, No Access)");
                 return false;
             }
         }
