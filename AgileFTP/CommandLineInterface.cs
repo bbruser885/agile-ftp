@@ -40,20 +40,20 @@ namespace AgileFTP {
         }
 
         private static void NewConnection() {
-            Console.Write("Enter hostname:");
+            Console.Write("Enter hostname: ");
             String h = Console.ReadLine();
             if (h == "?") {
                 SkipLogin();
                 return;
             }
-            Console.Write("Enter username:");
+            Console.Write("Enter username: ");
             String u = Console.ReadLine();
             Login(u,h, true);
         }
 
         private static void Login(string u, string h, bool shouldSaveIfSuccessful = false) {
             logFile = $"{u}.log";
-            Console.Write("Enter password:");
+            Console.Write("Enter password: ");
             String p = Console.ReadLine();
             connection = new FtpConnectionManager(u, p, h);
             if (connection.Validate()) {
