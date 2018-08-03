@@ -310,6 +310,11 @@ namespace FtpConnection
             return directoryDetails;
         }
 
+        private bool IsLocalDirectory(String path) {
+            FileAttributes attr = File.GetAttributes(path);
+            return attr.HasFlag(FileAttributes.Directory);
+        }
+
         /*
         Generates a new web request
         */
