@@ -242,6 +242,19 @@ namespace FtpConnection
             }
         }
 
+        public bool MakeDir(String remotePath) {
+            try {
+                FtpWebRequest request = GetNewRequest(remotePath);
+                request.Method = WebRequestMethods.Ftp.MakeDirectory;
+
+                request.GetResponse();
+                return true;
+            }
+            catch {
+                return false;
+            }
+        }
+
         /*
         I don't know what inputs will be needed for this so feel free to add the ones you need if you take the ticket
         */
