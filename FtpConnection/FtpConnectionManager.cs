@@ -143,7 +143,7 @@ namespace FtpConnection
                         file.Write(fileData, 0, fileData.Length);
                         file.Close();
                     }
-                    Console.WriteLine("Successfully Download " + filename + " to " + localpath);
+                    Console.WriteLine("Successfully Downloaded " + filename + " to " + localpath);
                 }
                 return true;
             }

@@ -165,7 +165,9 @@ namespace AgileFTP {
 
     public class CmdDownload : Command {
         public override void Execute(string[] args) {
-            CommandLineInterface.connection.Download(Path.GetFileName(args[2]), args.Length >= 3 ? args[2] : "", args[1]);
+            for (int i = 2; i < args.Length; i++){
+                CommandLineInterface.connection.Download(Path.GetFileName(args[i]), args.Length >= 3 ? args[i] : "", args[1]);
+            }
         }
 
         public override bool Validate(string[] args) {
