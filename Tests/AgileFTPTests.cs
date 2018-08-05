@@ -59,5 +59,32 @@ namespace AgileFTP.Tests
 	    var result = _list.Validate(args);
 	    Assert.True(result, "Local list should return false with invalid filename");
 	}
+
+	[Fact]
+	public void CmdMoveLocalFile_FalseWithNoArguments()
+	{
+	    CmdMoveLocalFile _move = new CmdMoveLocalFile();
+	    string[] args = {};
+	    var result = _move.Validate(args);
+	    Assert.False(result, "Local move should return false with no arguments");
+	}
+
+	[Fact]
+	public void CmdMoveLocalFile_FalseWithLessThan3()
+	{
+	    CmdMoveLocalFile _move = new CmdMoveLocalFile();
+	    string[] args = {"string1", "string2"};
+	    var result = _move.Validate(args);
+	    Assert.False(result, "Local move should return false with less than 3 arguments");
+	}
+
+	[Fact]
+	public void CmdMoveLocalFile_FalseWithInvalidFilename()
+	{
+	    CmdMoveLocalFile _move = new CmdMoveLocalFile();
+	    string[] args = {"string1", "this should never be a valid filename", "string2"};
+	    var result = _move.Validate(args);
+	    Assert.False(result, "Local move should return false with less than 3 arguments");
+	}
     }
 }
