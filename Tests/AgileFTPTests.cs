@@ -122,5 +122,23 @@ namespace AgileFTP.Tests
 	    var result = _download.Validate(args);
 	    Assert.True(result, "Download should return true with more than 2 arguments");
 	}
+
+	[Fact]
+	public void CmdRename_FalseWithNoArguments()
+	{
+	    CmdRename _rename = new CmdRename();
+	    string[] args = {};
+	    var result = _rename.Validate(args);
+	    Assert.False(result, "Rename should return false with no arguments");
+	}
+
+	[Fact]
+	public void CmdRename_TrueWithMoreThan2Args()
+	{
+	    CmdRename _rename = new CmdRename();
+	    string[] args = {"string1", "string2", "string3"};
+	    var result = _rename.Validate(args);
+	    Assert.True(result, "Rename should return false with no arguments");
+	}
     }
 }
