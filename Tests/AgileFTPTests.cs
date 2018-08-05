@@ -86,5 +86,23 @@ namespace AgileFTP.Tests
 	    var result = _move.Validate(args);
 	    Assert.False(result, "Local move should return false with less than 3 arguments");
 	}
+
+	[Fact]
+	public void CmdUpload_FalseWithNoArguments()
+	{
+	    CmdUpload _upload = new CmdUpload();
+	    string[] args = {};
+	    var result = _upload.Validate(args);
+	    Assert.False(result, "Upload move should return false with no arguments");
+	}
+
+	[Fact]
+	public void CmdUpload_TrueWithMoreThan2Args()
+	{
+	    CmdUpload _upload = new CmdUpload();
+	    string[] args = {"string1", "string2", "string3"};
+	    var result = _upload.Validate(args);
+	    Assert.True(result, "Upload move should return true with more than 2 arguments");
+	}
     }
 }
