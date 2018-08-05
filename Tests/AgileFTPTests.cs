@@ -138,7 +138,43 @@ namespace AgileFTP.Tests
 	    CmdRename _rename = new CmdRename();
 	    string[] args = {"string1", "string2", "string3"};
 	    var result = _rename.Validate(args);
-	    Assert.True(result, "Rename should return false with no arguments");
+	    Assert.True(result, "Rename should return true with more than 2 arguments");
+	}
+
+	[Fact]
+	public void CmdDelete_FalseWithNoArguments()
+	{
+	    CmdDelete _delete = new CmdDelete();
+	    string[] args = {};
+	    var result = _delete.Validate(args);
+	    Assert.False(result, "Delete should return false with no arguments");
+	}
+
+	[Fact]
+	public void CmdDelete_TrueWithMoreThan2Args()
+	{
+	    CmdDelete _delete = new CmdDelete();
+	    string[] args = {"string1", "string2", "string3"};
+	    var result = _delete.Validate(args);
+	    Assert.True(result, "Delete should return true with more than 2 arguments");
+	}
+
+	[Fact]
+	public void CmdHelp_TrueWithNoArguments()
+	{
+	    CmdHelp _help = new CmdHelp();
+	    string[] args = {};
+	    var result = _help.Validate(args);
+	    Assert.True(result, "Help should return true with no arguments");
+	}
+
+	[Fact]
+	public void CmdHelp_FalseWithMore1Args()
+	{
+	    CmdHelp _help = new CmdHelp();
+	    string[] args = {"string1", "string2"};
+	    var result = _help.Validate(args);
+	    Assert.False(result, "Help should return false with more than one arguments");
 	}
     }
 }
