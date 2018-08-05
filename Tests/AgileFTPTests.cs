@@ -93,7 +93,7 @@ namespace AgileFTP.Tests
 	    CmdUpload _upload = new CmdUpload();
 	    string[] args = {};
 	    var result = _upload.Validate(args);
-	    Assert.False(result, "Upload move should return false with no arguments");
+	    Assert.False(result, "Upload should return false with no arguments");
 	}
 
 	[Fact]
@@ -102,7 +102,25 @@ namespace AgileFTP.Tests
 	    CmdUpload _upload = new CmdUpload();
 	    string[] args = {"string1", "string2", "string3"};
 	    var result = _upload.Validate(args);
-	    Assert.True(result, "Upload move should return true with more than 2 arguments");
+	    Assert.True(result, "Upload should return true with more than 2 arguments");
+	}
+
+	[Fact]
+	public void CmdDownload_FalseWithNoArguments()
+	{
+	    CmdDownload _download = new CmdDownload();
+	    string[] args = {};
+	    var result = _download.Validate(args);
+	    Assert.False(result, "Download should return false with no arguments");
+	}
+
+	[Fact]
+	public void CmdDownload_TrueWithMoreThan2Args()
+	{
+	    CmdDownload _download = new CmdDownload();
+	    string[] args = {"string1", "string2", "string3"};
+	    var result = _download.Validate(args);
+	    Assert.True(result, "Download should return true with more than 2 arguments");
 	}
     }
 }
