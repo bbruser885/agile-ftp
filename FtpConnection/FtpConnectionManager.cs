@@ -75,15 +75,41 @@ namespace FtpConnection
         }
 
         /*
-        This class takes in the filename and path to the file as well as the remote path
+        This method takes in the filename and path to the file as well as the remote path
         in case it is not root and returns true on success and false on failure
         */
-        public bool Upload(string filename,string remotepath, string localpath)
+        public bool Upload(string filename, string remotepath, string localpath) {
+            try {
+                if (IsLocalDirectory(localpath)) {
+                    if (!MakeDir(remotepath + "/" + filename)) {
+                        return false; // this stops uploading if the remote directory already exists
+                    }
+
+                    String[] files = Directory.GetFileSystemEntries(localpath);
+                    foreach (String file in files) {
+                        Upload(Path.GetFileName(file),
+                               remotepath + "/" + filename,
+                               file);
+                    }
+
+                    return true;
+                }
+                else {
+                    return UploadFile(filename, remotepath, localpath);
+                }
+            }
+            catch (Exception ex) {
+                Console.WriteLine("Error: {0}", ex.Message);
+                return false;
+            }
+        }
+
+        private bool UploadFile(string filename,string remotepath, string localpath)
         {
             try
             {
                 /* Create the FTP request */
-                FtpWebRequest newRequest = GetNewRequest(remotepath + filename);
+                FtpWebRequest newRequest = GetNewRequest(remotepath + "/" + filename);
 
                 /* Set ftp properties */
                 newRequest.Method = WebRequestMethods.Ftp.UploadFile;
@@ -103,7 +129,6 @@ namespace FtpConnection
                 serverStream.Write(uploadBuffer, 0, uploadBuffer.Length);
                 serverStream.Close();
 
-                Console.WriteLine("File was successfully uploaded.");
                 return true;
             }
             catch(FileNotFoundException e)

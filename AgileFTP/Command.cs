@@ -151,7 +151,11 @@ namespace AgileFTP {
 
     public class CmdUpload : Command {
         public override void Execute(string[] args) {
-            CommandLineInterface.connection.Upload(Path.GetFileName(args[1]), args.Length >= 3 ? args[2] : "", args[1]);
+            if (CommandLineInterface.connection.Upload(Path.GetFileName(args[1]), args.Length >= 3 ? args[2] : ".", args[1]))
+                Console.WriteLine("Success");
+            else
+                Console.WriteLine("Failure");
+
         }
 
         public override bool Validate(string[] args) {
