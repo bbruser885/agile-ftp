@@ -151,16 +151,18 @@ namespace AgileFTP {
 
     public class CmdUpload : Command {
         public override void Execute(string[] args) {
-            if (CommandLineInterface.connection.Upload(Path.GetFileName(args[1]), args.Length >= 3 ? args[2] : ".", args[1]))
-                Console.WriteLine("Success");
-            else
-                Console.WriteLine("Failure");
+            for (int i = 1; i < args.Length; ++i) {
+                if (CommandLineInterface.connection.Upload(Path.GetFileName(args[i]), ".", args[i]))
+                    Console.WriteLine("Success ({0})", args[i]);
+                else
+                    Console.WriteLine("Failure ({0})", args[i]);
+            }
 
         }
 
         public override bool Validate(string[] args) {
             if (args.Length < 2) {
-                Console.Write("Invalid use: upload [localPath] [remotePath (default cwd)]");
+                Console.Write("Invalid use: upload [localPaths] (uploads to cwd)");
                 return false;
             }
             return true;
@@ -219,7 +221,7 @@ namespace AgileFTP {
 			Console.WriteLine("exit            exit app");
 			Console.WriteLine("ls              list directory");
 			Console.WriteLine("cd              cd [path]");
-			Console.WriteLine("upload          upload [localPath] [remotePath (default cwd)]");
+			Console.WriteLine("upload          upload [localPaths] (uploads to cwd)");
 			Console.WriteLine("download        download [localPath] [remotePath (default cwd)]");
 			Console.WriteLine("rename          rename [remotePath (default cwd)] [New Filename]");
             Console.WriteLine("lls             list local directory");
