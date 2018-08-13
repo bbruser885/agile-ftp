@@ -1,31 +1,47 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgileFTP", "AgileFTP\AgileFTP.csproj", "{5F39DB82-6244-4848-9251-263C8D01459C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FtpConnection", "FtpConnection\FtpConnection.csproj", "{43D6672E-A4A6-44D4-8126-D6EAECCD0841}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FtpConnection", "FtpConnection\FtpConnection.csproj", "{43D6672E-A4A6-44D4-8126-D6EAECCD0841}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{147F1868-FC49-43C8-92D7-5C40E32389EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{147F1868-FC49-43C8-92D7-5C40E32389EE}"
+EndProject
+Project("{840C416C-B8F3-42BC-B0DD-F6BB14C9F8CB}") = "agileFTPInstaller", "agileFTPInstaller\agileFTPInstaller.aiproj", "{EC6BA230-A3FD-405D-8536-9FCEF988A34A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		All|Any CPU = All|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5F39DB82-6244-4848-9251-263C8D01459C}.All|Any CPU.ActiveCfg = Release|Any CPU
+		{5F39DB82-6244-4848-9251-263C8D01459C}.All|Any CPU.Build.0 = Release|Any CPU
 		{5F39DB82-6244-4848-9251-263C8D01459C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5F39DB82-6244-4848-9251-263C8D01459C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F39DB82-6244-4848-9251-263C8D01459C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F39DB82-6244-4848-9251-263C8D01459C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43D6672E-A4A6-44D4-8126-D6EAECCD0841}.All|Any CPU.ActiveCfg = Release|Any CPU
+		{43D6672E-A4A6-44D4-8126-D6EAECCD0841}.All|Any CPU.Build.0 = Release|Any CPU
 		{43D6672E-A4A6-44D4-8126-D6EAECCD0841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{43D6672E-A4A6-44D4-8126-D6EAECCD0841}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43D6672E-A4A6-44D4-8126-D6EAECCD0841}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43D6672E-A4A6-44D4-8126-D6EAECCD0841}.Release|Any CPU.Build.0 = Release|Any CPU
+		{147F1868-FC49-43C8-92D7-5C40E32389EE}.All|Any CPU.ActiveCfg = Release|Any CPU
+		{147F1868-FC49-43C8-92D7-5C40E32389EE}.All|Any CPU.Build.0 = Release|Any CPU
 		{147F1868-FC49-43C8-92D7-5C40E32389EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{147F1868-FC49-43C8-92D7-5C40E32389EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{147F1868-FC49-43C8-92D7-5C40E32389EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{147F1868-FC49-43C8-92D7-5C40E32389EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC6BA230-A3FD-405D-8536-9FCEF988A34A}.All|Any CPU.ActiveCfg = DefaultBuild
+		{EC6BA230-A3FD-405D-8536-9FCEF988A34A}.All|Any CPU.Build.0 = DefaultBuild
+		{EC6BA230-A3FD-405D-8536-9FCEF988A34A}.Debug|Any CPU.ActiveCfg = DefaultBuild
+		{EC6BA230-A3FD-405D-8536-9FCEF988A34A}.Debug|Any CPU.Build.0 = DefaultBuild
+		{EC6BA230-A3FD-405D-8536-9FCEF988A34A}.Release|Any CPU.ActiveCfg = DefaultBuild
+		{EC6BA230-A3FD-405D-8536-9FCEF988A34A}.Release|Any CPU.Build.0 = DefaultBuild
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
