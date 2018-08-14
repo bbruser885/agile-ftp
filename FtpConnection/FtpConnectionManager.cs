@@ -274,6 +274,28 @@ namespace FtpConnection
             }
         }
 
+	/*
+        This class takes in the path and
+        returns true on success and false on failure
+         */
+        public bool DeleteDir(string remotepath)
+        {
+            try
+            {
+                var request = GetNewRequest(PreprocessPath(remotepath));
+                request.Method = WebRequestMethods.Ftp.RemoveDirectory;
+
+                FtpWebResponse response = (FtpWebResponse) request.GetResponse();
+		Console.WriteLine("Successfully removed " + remotepath);
+                return true;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("File Unavailable (e.g. File Not Found, No Access)");
+                return false;
+            }
+        }
+
         /*
         I don't know if this should return a bool or if it will need to return something else feel free to change if you take the ticket for it
          */
@@ -412,8 +434,8 @@ namespace FtpConnection
                 final = path;
             else
                 final = cwd + path;
-            
-            
+
+
             return final;
         }
 

@@ -17,6 +17,7 @@ namespace AgileFTP {
         public static CmdLocalList lls = new CmdLocalList();
         public static CmdMoveLocalFile lmv = new CmdMoveLocalFile();
 	public static CmdDelete rm = new CmdDelete();
+	public static CmdDeleteDir rmdir = new CmdDeleteDir();
 
         public static Command GetCommand(string s) {
             switch (s) {
@@ -40,6 +41,8 @@ namespace AgileFTP {
                     return lmv;
 		case "rm":
 		    return rm;
+		case "rmdir":
+		    return rmdir;
                 default:
                     return null;
             }
@@ -207,6 +210,20 @@ namespace AgileFTP {
 	public override bool Validate(string[] args) {
 	    if (args.Length < 2) {
 		Console.WriteLine("Invalid use: rm [remotePath (default cwd)] [filename]");
+		return false;
+	    }
+	    return true;
+	}
+    }
+
+    public class CmdDeleteDir : Command {
+	public override void Execute(string[] args) {
+	    CommandLineInterface.connection.DeleteDir(args[1]);
+	}
+
+	public override bool Validate(string[] args) {
+	    if (args.Length < 1) {
+		Console.WriteLine("Invalid use: rmdir [remotePath]");
 		return false;
 	    }
 	    return true;
