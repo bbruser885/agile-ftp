@@ -106,6 +106,7 @@ namespace FtpConnection
 
         private bool UploadFile(string filename,string remotepath, string localpath)
         {
+            int offset = (int)GetFilesize(remotepath + "/" + filename);
             try
             {
                 /* Create the FTP request */
@@ -126,7 +127,7 @@ namespace FtpConnection
 
                 /*Upload the file to the server*/
                 Stream serverStream = newRequest.GetRequestStream();
-                serverStream.Write(uploadBuffer, 0, uploadBuffer.Length);
+                serverStream.Write(uploadBuffer, offset, uploadBuffer.Length);
                 serverStream.Close();
 
                 return true;
@@ -140,6 +141,28 @@ namespace FtpConnection
             {
                 Console.WriteLine("Error: Something nebulous went wrong\n");
                 return false;
+            }
+        }
+
+        public long GetFilesize(string remotePath)
+        {
+            try
+            {
+                FtpWebRequest request = GetNewRequest(remotePath);
+                request.Method = WebRequestMethods.Ftp.GetFileSize;
+                request.Credentials = new NetworkCredential(username, password);
+                request.UseBinary = true;
+                request.KeepAlive = true;
+
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                long size = response.ContentLength;
+                response.Close();
+
+                return size;
+            }
+            catch (Exception e)
+            {
+                return 0;
             }
         }
 
