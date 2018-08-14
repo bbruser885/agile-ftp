@@ -151,25 +151,34 @@ namespace FtpConnection
         {
             try
             {
-                /* set ftpFullPath (e.g. ftp://pigs.land/test/yes.jpg) */
+                FileInfo file = new FileInfo(localpath + filename);
                 string ftpFullPath = "ftp://" + hostname + remotepath;
-
-                /* WebClient API request*/
-                using (WebClient newRequest = new WebClient())
+                FileStream localfileStream;
+                FtpWebRequest request = WebRequest.Create(ftpFullPath) as FtpWebRequest;
+                request.Credentials = new NetworkCredential(username, password);
+                request.Method = WebRequestMethods.Ftp.DownloadFile;
+                //check if file has previously been downloaded
+                if (file.Exists)
                 {
-                    /*Send the credentials to the server*/
-                    newRequest.Credentials = new NetworkCredential(username, password);
-                    /*Load ftp file from ftpFullPath into byte array*/
-                    byte[] fileData = newRequest.DownloadData(ftpFullPath);
-
-                    /*Open FileStream to the local path + file name (e.g. C:\Users\You\yes.jpg) and write*/
-                    using (FileStream file = File.Create(localpath + filename))
-                    {
-                        file.Write(fileData, 0, fileData.Length);
-                        file.Close();
-                    }
-                    Console.WriteLine("Successfully Downloaded " + filename + " to " + localpath);
+                    request.ContentOffset = file.Length;
+                    localfileStream = new FileStream(localpath + filename, FileMode.Append, FileAccess.Write);
                 }
+                else
+                {
+                    localfileStream = new FileStream(localpath + filename, FileMode.Create, FileAccess.Write);
+                }
+                WebResponse response = request.GetResponse();
+                Stream responseStream = response.GetResponseStream();
+                byte[] buffer = new byte[1024];
+                int bytesRead = responseStream.Read(buffer, 0, 1024);
+                while (bytesRead != 0)
+                {
+                    localfileStream.Write(buffer, 0, bytesRead);
+                    bytesRead = responseStream.Read(buffer, 0, 1024);
+                }
+                localfileStream.Close();
+                responseStream.Close();
+                Console.WriteLine("Successfully Downloaded " + filename + " to " + localpath);
                 return true;
             }
             /*When you mess up the remote file path */
