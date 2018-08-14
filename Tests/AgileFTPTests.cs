@@ -160,6 +160,24 @@ namespace AgileFTP.Tests
 	}
 
 	[Fact]
+	public void CmdDeleteDir_FalseWithNoArguments()
+	{
+	    CmdDeleteDir _delete = new CmdDeleteDir();
+	    string[] args = {};
+	    var result = _delete.Validate(args);
+	    Assert.False(result, "Delete directory should return false with no arguments");
+	}
+
+	[Fact]
+	public void CmdDeleteDir_TrueWithMoreThan2Args()
+	{
+	    CmdDeleteDir _delete = new CmdDeleteDir();
+	    string[] args = {"string1", "string2", "string3"};
+	    var result = _delete.Validate(args);
+	    Assert.True(result, "Delete directory should return true with more than 2 arguments");
+	}
+
+	[Fact]
 	public void CmdHelp_TrueWithNoArguments()
 	{
 	    CmdHelp _help = new CmdHelp();
