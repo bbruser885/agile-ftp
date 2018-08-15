@@ -13,14 +13,14 @@ This means the program should run on mac and linux as well as long as you do not
 upon starting the program you will be prompted to create a new connection.
 after which you will get a command line prompt.
 from that prompt you can type the following commands:
-*****COMMAND******************************ARGUMENTS***************************************************DEFINITION
-      help                              none                                    prints the commands you can list
-      exit                              none                                    exits the application
-      ls                                optional[directory path]                list the directory
-      cd                                [directory path]                        change directory
-      upload                            [local path]                            uploads file at local path
-      download                          [local path][remote path]               downloads file from remote to local
-      rename                            [remote path][new name]                 renames remote file
-      lls                                optional[directory path]               list local directory
-      lmv                                [file path][new name/path]             move/rename local file
-      rm                                 optional[remote path][filename]        remove remote file
+COMMAND******************************ARGUMENTS***************************************************DEFINITION
+*      help                              none                                    prints the commands you can list
+*      exit                              none                                    exits the application
+*      ls                                optional[directory path]                list the directory
+*      cd                                [directory path]                        change directory
+*      upload                            [local path]                            uploads file at local path
+*      download                          [local path][remote path]               downloads file from remote to local
+*      rename                            [remote path][new name]                 renames remote file
+*      lls                                optional[directory path]               list local directory
+*      lmv                                [file path][new name/path]             move/rename local file
+*      rm                                 optional[remote path][filename]        remove remote file
